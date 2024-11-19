@@ -57,7 +57,7 @@ st.code(
 
 st.markdown("")
 
-st.subheader("Installer son environment conda")
+st.subheader("Installer son environment python pour ce tutoriel")
 
 st.markdown(
     """
@@ -69,14 +69,13 @@ st.markdown(
 
 st.code(
     """
-        ## Récupérer l'envrionment du tutoriel
-        conda env create --name cg-streamlit -f environment.yaml
+        ## Créer l'envrionment du tutoriel
+        cd src
+        python -m venv ./venv
+        pip install -r requirements.txt
 
-        ## Activer l'environment conda
-        source activate cg-streamlit
-
-        ## Ou pour les puristes
-        conda activate cg-streamlit
+        ## Activer l'environment 
+        source venv/bin/activate
     """
 )
 

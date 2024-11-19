@@ -5,7 +5,7 @@
 ### Créer et activer l'environement python
 
 Pour lancer une application Streamlit il faut avoir le package **streamlit** installé. Il peut être installé 
-de façon globale mais le mieux est quand même de créer un environment **conda** avec les packages python que vous 
+de façon globale mais le mieux est quand même de créer un environment python avec les packages que vous 
 voulez utiliser en plus !
 
 Pour aller plus vite, il est possible de créer un environment avec tous les packages utilisé pour créer le dashboard
@@ -13,8 +13,10 @@ du point geek en utilisant le fichier *environment.yaml*
 
 ```
 bash
-## Crée l'environement conda avec les packages utilisé pour le dashboard du tutoriel
-conda env create --name <env-name> -f environment.yaml
+## Crée l'environement python avec les packages utilisé pour le dashboard du tutoriel
+cd src
+python -m venv ./venv
+pip install -r requirements.txt
 ```
 
 ### Créer son un dashboard de base

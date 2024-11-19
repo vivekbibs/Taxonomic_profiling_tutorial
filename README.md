@@ -26,8 +26,8 @@ on va y remédier et apprendre à créer des dashboards web pour montrer ses don
 Pour bien suivre le tutoriel, il y a certains programmes qui sont nécéssaire d'avoir installé sur son ordinateur. 
 
 - git
-- conda
 - python3
+- pip
 
 De préférence, utiliser plutôt Linux pour suivre le tutoriel. Sous windows, les étapes devraient être identiques, 
 mais des erreurs de packages python peuvent tout de même subsister :/ 
@@ -40,11 +40,10 @@ mais des erreurs de packages python peuvent tout de même subsister :/
 ## Mise en place de l'environement
 
 Une application streamlit repose sur plusieurs packages python qu'il est pertinent de regrouper dans un même 
-environement conda. La liste des packages nécéssaire pour créer l'application démo du tutoriel est dans
+environement python. La liste des packages nécéssaire pour créer l'application démo du tutoriel est dans
 le fichier **src/environment.yaml**.
 
-La méthode la plus simple pour suivre le tutoriel est de cloner le répertoire github puis de créer un environment
-conda avec le fichier **environment.yaml**
+La méthode la plus simple pour suivre le tutoriel est de cloner le répertoire github puis de créer un environment avec le fichier **requirements.txt**
 
 Cloner le répertoire github
 
@@ -53,17 +52,24 @@ bash
 git clone https://github.com/Phloemus/Streamlit-Coin-Geek.git
 ```
 
-Créer un environement conda avec les packages nécéssaire pour le tutoriels
+Créer un environement python avec les packages nécéssaire pour le tutoriels
 
 ```
 bash
-conda env create --name streamlit-coin-geek
-source activate streamlit-coin-geek
-conda env export > src/environment.yaml
+cd Streamlit-Coin-Geek/src
+python -m venv ./venv
+pip install -r requirements.txt
 ```
 
-Et voilà, maintenant il y un environment conda avec streamlit et tous les packages nécéssaire pour déployer l'application 
-du tutoriel !
+Activer l'environement python du tutoriel
+
+```
+bash
+source venv/bin/activate
+```
+
+Et voilà, maintenant il y un environment contenant streamlit et tous les packages nécéssaire pour déployer l'application 
+du tutoriel qui est déployé en local !
 
 ## Tutoriel
 

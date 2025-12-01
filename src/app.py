@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 # --- Introduction du Tutoriel ---
-st.markdown("# 🧬 Tutoriel: Profiling Taxonomique Interactif")
+st.markdown("# 🧬 Tutoriel: Profiling Taxonomique")
 st.markdown("---")
 
 st.markdown(
@@ -18,8 +18,10 @@ st.markdown(
 
     Cette application est conçue pour vous permettre d'explorer et d'analyser vos données
     de séquençage métagénomique. Le profiling taxonomique est
-    une étape cruciale en métagénomique : il permet d'identifier et de quantifier les micro-organismes
-    (bactéries, archées, eucaryotes, virus) présents dans un échantillon complexe (sol, eau, intestin, etc.).
+    une étape cruciale en métagénomique : il permet d'identifier et de quantifier les micro-organismes rapidement
+    (bactéries, archées, eucaryotes, virus) présents dans un échantillon (sol, eau, intestin, etc.).
+    Le profilage des métagénomes vis à vis des bases de données permet la détection et la quantification relative
+    des micro-organismes, même en faibles abondances lorsque l'assemblage n'est pas possible.
     """
 )
 
@@ -34,7 +36,7 @@ st.markdown("---")
 
 # --- Début des composants interactifs de l'application ---
 
-st.markdown("## ⚙️ Classification et Paramètres de l'Échantillon")
+st.markdown("## 🦠 Classification et Paramètres de l'Échantillon")
 
 # Utilisation des colonnes pour organiser les questions
 col_reads, col_type, complex_or_not = st.columns(3)
@@ -63,7 +65,7 @@ if sample_category == "Humain":
     st.markdown("### Détails de l'Échantillon Humain")
     human_sample_type = st.radio(
         "**3. Quel type d'échantillon humain analysez-vous ?**",
-        ["Intestinal (Gut)", "Cutané (Skin)", "Oral", "Vaginal", "Sanguin (Blood)", "Autre"],
+        ["Intestinal (Gut)", "Cutané (Skin)", "Oral", "Autre"],
         index=0,
         horizontal=True,
         help="Ces sites ont des communautés microbiennes très distinctes."
@@ -72,7 +74,7 @@ elif sample_category == "Environnemental":
     st.markdown("### Détails de l'Échantillon Environnemental")
     env_sample_type = st.radio(
         "**3. Quel type d'environnement étudiez-vous ?**",
-        ["Marin (Océan, Récif)", "Sol (Soil)", "Eau douce (Freshwater)", "Air", "Sédiment"],
+        ["Océanique (Ocean)", "Sol (Soil)", "Eau douce (Freshwater)", "Air", "Sédiment", "Autre"],
         index=1,
         horizontal=True,
         help=""
@@ -81,7 +83,7 @@ elif sample_category == "Animal":
     st.markdown("### Détails de l'Échantillon Animal")
     animal_sample_type = st.radio(
         "**3. Quel animal analysez-vous ?**",
-        ["Souris (mouse)", "Rat", "Chien (dog)", "Chat (cat)", "Gallus gallus domesticus", "Lapin (rabbit)", "Cochon (pig)"],
+        ["Souris (mouse)", "Rat", "Chien (dog)", "Chat (cat)", "Gallus gallus domesticus", "Lapin (rabbit)", "Cochon (pig)","Autre"],
         index=0,
         horizontal=True,
         help="Ces sites ont des communautés microbiennes très distinctes."
@@ -94,20 +96,20 @@ with complex_or_not:
         index=0,
         help="Complexe ==> Outils de reconstruction de MAGs ; sinon ==> Profling taxonomique."
     )
-
-
 st.markdown("---")
 
 # Autres paramètres de l'analyse (inchangés ou adaptés)
-st.markdown("## ⚙️ Paramètres d'Analyse (Filtres)")
+st.markdown("## ⚙️ Paramètres d'Analyse")
 
-col_gene, col_seuil, col_date = st.columns(3)
+col_seuil,col_organisms_searched = st.columns(2)
 
-with col_gene:
-    st.selectbox(
-        "**4. Nom du marqueur génétique (si ciblé)**",
-        ("Métagénome total", "16S rRNA", "ITS", "18S rRNA"),
-        help="Sélectionnez 'Métagénome total' si vous utilisez des séquences Shotgun."
+with col_organisms_searched:
+    st.markdown("### Organismes Recherchés")
+    organisms = st.multiselect(
+        "**Types d'organismes recherchés dans l'échantillon**",
+        ["Bactéries", "Archées", "Eucaryotes", "Virus"],
+        default=["Bactéries", "Archées", "Eucaryotes", "Virus"],
+        help="Sélectionnez les types d'organismes que vous souhaitez identifier dans votre échantillon."
     )
 
 with col_seuil:
@@ -116,13 +118,6 @@ with col_seuil:
         options=list(range(50, 101, 5)),
         value=80,
         help="Définissez le pourcentage minimal de confiance pour l'assignation taxonomique."
-    )
-
-with col_date:
-    st.date_input(
-        "**6. Date de l'analyse**",
-        datetime.date(2024, 7, 6),
-        help="Indiquez la date de réalisation de l'analyse bio-informatique."
     )
 
 st.markdown("---")

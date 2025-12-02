@@ -38,8 +38,21 @@ st.markdown("---")
 
 st.markdown("## 🦠 Classification et Paramètres de l'Échantillon")
 
+complex_or_not= st.columns(1)[0]
+
+with complex_or_not:
+    st.markdown("### Complexité de l'Échantillon")
+    complexity = st.radio(
+        "**Complexité de l'échantillon**",
+        ["Complexe (Beaucoup d'espèces inconnues)", "Relativement peu d'espèces inconnues"],
+        index=0,
+        help="Complexe ==> Outils de reconstruction de MAGs ; sinon ==> Profling taxonomique."
+    )
+    if complexity == "Complexe (Beaucoup d'espèces inconnues)":
+        st.warning("Pour les échantillons complexes, nous recommandons d'utiliser le pipeline de reconstruction de MAGs.")
+        
 # Utilisation des colonnes pour organiser les questions
-col_reads, col_type, complex_or_not = st.columns(3)
+col_reads, col_type= st.columns(2)
 
 with col_reads:
     st.markdown("### Type de Séquençage")
@@ -70,15 +83,25 @@ if sample_category == "Humain":
         horizontal=True,
         help="Ces sites ont des communautés microbiennes très distinctes."
     )
+    if human_sample_type == "Intestinal (Gut)":
+        catalogue = "hs_10_4_gut"
+    elif human_sample_type == "Cutané (Skin)":
+        catalogue = "hs_2_9_skin"
+    elif human_sample_type == "Oral":
+        catalogue = "hs_8_14_oral"
+    
 elif sample_category == "Environnemental":
     st.markdown("### Détails de l'Échantillon Environnemental")
     env_sample_type = st.radio(
         "**3. Quel type d'environnement étudiez-vous ?**",
-        ["Océanique (Ocean)", "Sol (Soil)", "Eau douce (Freshwater)", "Air", "Sédiment", "Autre"],
+        ["Océanique (Ocean)", "Sol (Soil)","Autre"],
         index=1,
         horizontal=True,
         help=""
     )
+    if env_sample_type == "Océanique (Ocean)" or env_sample_type == "Sol (Soil)":
+        catalogue = "GlobDB"
+
 elif sample_category == "Animal":
     st.markdown("### Détails de l'Échantillon Animal")
     animal_sample_type = st.radio(
@@ -88,14 +111,7 @@ elif sample_category == "Animal":
         horizontal=True,
         help="Ces sites ont des communautés microbiennes très distinctes."
     )
-with complex_or_not:
-    st.markdown("### Complexité de l'Échantillon")
-    complexity = st.radio(
-        "**Complexité de l'échantillon**",
-        ["Complexe (Beaucoup d'espèces inconnues)", "Relativement peu d'espèces inconnues"],
-        index=0,
-        help="Complexe ==> Outils de reconstruction de MAGs ; sinon ==> Profling taxonomique."
-    )
+
 st.markdown("---")
 
 # Autres paramètres de l'analyse (inchangés ou adaptés)

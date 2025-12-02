@@ -36,11 +36,11 @@ st.markdown("---")
 
 # --- Début des composants interactifs de l'application ---
 
-st.markdown("## 🦠 Classification et Paramètres de l'Échantillon")
+st.markdown("## 🦠 Paramètres de l'Échantillon")
 
-complex_or_not= st.columns(1)[0]
+col_complex_or_not= st.columns(1)[0]
 
-with complex_or_not:
+with col_complex_or_not:
     st.markdown("### Complexité de l'Échantillon")
     complexity = st.radio(
         "**Complexité de l'échantillon**",
@@ -52,16 +52,7 @@ with complex_or_not:
         st.warning("Pour les échantillons complexes, nous recommandons d'utiliser le pipeline de reconstruction de MAGs.")
         
 # Utilisation des colonnes pour organiser les questions
-col_reads, col_type= st.columns(2)
-
-with col_reads:
-    st.markdown("### Type de Séquençage")
-    # Choix entre Long Reads et Short Reads
-    reads_type = st.radio(
-        "**1. Quel est le type de lectures générées ?**",
-        ["Short Reads (Illumina, etc.)", "Long Reads (PacBio, Nanopore, etc.)"],
-        help=""
-    )
+col_type= st.columns(1)[0]
 
 with col_type:
     st.markdown("### Source de l'Échantillon")
@@ -115,9 +106,20 @@ elif sample_category == "Animal":
 st.markdown("---")
 
 # Autres paramètres de l'analyse (inchangés ou adaptés)
+st.markdown("## 🧬 Paramètres de Séquençage")
+col_reads = st.columns(1)[0]
+with col_reads:
+    st.markdown("### Type de Séquençage")
+    # Choix entre Long Reads et Short Reads
+    reads_type = st.radio(
+        "**1. Quel est le type de lectures générées ?**",
+        ["Short Reads (Illumina, etc.)", "Long Reads (PacBio, Nanopore, etc.)"],
+        help=""
+    )
+# Autres paramètres de l'analyse (inchangés ou adaptés)
 st.markdown("## ⚙️ Paramètres d'Analyse")
 
-col_seuil,col_organisms_searched = st.columns(2)
+col_seuil,col_organisms_searched,col_analysis_type = st.columns(3)
 
 with col_organisms_searched:
     st.markdown("### Organismes Recherchés")
@@ -127,7 +129,12 @@ with col_organisms_searched:
         default=["Bactéries", "Archées", "Eucaryotes", "Virus"],
         help="Sélectionnez les types d'organismes que vous souhaitez identifier dans votre échantillon."
     )
-
+with col_analysis_type:
+    st.markdown("### Type d'Analyse")
+    analysis_type = st.multiselect(
+        "**Type d'analyse souhaitée en + du profiling taxonomique**",
+        ["Profiling fonctionnel ", "Strain-level profiling"]
+    )
 with col_seuil:
     st.select_slider(
         "**5. Seuil minimal de confiance (%)**",
@@ -135,6 +142,7 @@ with col_seuil:
         value=80,
         help="Définissez le pourcentage minimal de confiance pour l'assignation taxonomique."
     )
+
 
 st.markdown("---")
 

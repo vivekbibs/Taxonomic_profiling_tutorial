@@ -156,6 +156,9 @@ with col_analysis_type:
         st.info(
             "Le profiling fonctionnel et le strain-level profiling seront effectués en plus du profiling taxonomique."
         )
+        st.info(
+            "Ce sera effectué par meteor2 et la suite Biobakery (Humann3, StrainPhlAn3, metaphlan)."
+        )
 
 
 with col_seuil:

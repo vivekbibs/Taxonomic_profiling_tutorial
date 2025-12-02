@@ -5,7 +5,7 @@ import datetime
 st.set_page_config(
     page_title="Tutoriel Profiling Taxonomique",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
 
 # --- Introduction du Tutoriel ---
@@ -38,21 +38,26 @@ st.markdown("---")
 
 st.markdown("## 🦠 Paramètres de l'Échantillon")
 
-col_complex_or_not= st.columns(1)[0]
+col_complex_or_not = st.columns(1)[0]
 
 with col_complex_or_not:
     st.markdown("### Complexité de l'Échantillon")
     complexity = st.radio(
         "**Complexité de l'échantillon**",
-        ["Complexe (Beaucoup d'espèces inconnues)", "Relativement peu d'espèces inconnues"],
+        [
+            "Complexe (Beaucoup d'espèces inconnues)",
+            "Relativement peu d'espèces inconnues",
+        ],
         index=0,
-        help="Complexe ==> Outils de reconstruction de MAGs ; sinon ==> Profling taxonomique."
+        help="Complexe ==> Outils de reconstruction de MAGs ; sinon ==> Profling taxonomique.",
     )
     if complexity == "Complexe (Beaucoup d'espèces inconnues)":
-        st.warning("Pour les échantillons complexes, nous recommandons d'utiliser le pipeline de reconstruction de MAGs.")
-        
+        st.warning(
+            "Pour les échantillons complexes, nous recommandons d'utiliser le pipeline de reconstruction de MAGs."
+        )
+
 # Utilisation des colonnes pour organiser les questions
-col_type= st.columns(1)[0]
+col_type = st.columns(1)[0]
 
 with col_type:
     st.markdown("### Source de l'Échantillon")
@@ -61,7 +66,7 @@ with col_type:
         "**2. Quelle est la source générale de votre échantillon ?**",
         ["Humain", "Environnemental", "Animal", "Autre"],
         index=0,
-        help="Les bases de données sont souvent spécifiques et adaptées à un ou plusieurs environnements particuliers"
+        help="Les bases de données sont souvent spécifiques et adaptées à un ou plusieurs environnements particuliers",
     )
 
 # Question conditionnelle basée sur la catégorie d'échantillon
@@ -72,7 +77,7 @@ if sample_category == "Humain":
         ["Intestinal (Gut)", "Cutané (Skin)", "Oral", "Autre"],
         index=0,
         horizontal=True,
-        help="Ces sites ont des communautés microbiennes très distinctes."
+        help="Ces sites ont des communautés microbiennes très distinctes.",
     )
     if human_sample_type == "Intestinal (Gut)":
         catalogue = "hs_10_4_gut"
@@ -80,15 +85,15 @@ if sample_category == "Humain":
         catalogue = "hs_2_9_skin"
     elif human_sample_type == "Oral":
         catalogue = "hs_8_14_oral"
-    
+
 elif sample_category == "Environnemental":
     st.markdown("### Détails de l'Échantillon Environnemental")
     env_sample_type = st.radio(
         "**3. Quel type d'environnement étudiez-vous ?**",
-        ["Océanique (Ocean)", "Sol (Soil)","Autre"],
+        ["Océanique (Ocean)", "Sol (Soil)", "Autre"],
         index=1,
         horizontal=True,
-        help=""
+        help="",
     )
     if env_sample_type == "Océanique (Ocean)" or env_sample_type == "Sol (Soil)":
         catalogue = "GlobDB"
@@ -97,10 +102,19 @@ elif sample_category == "Animal":
     st.markdown("### Détails de l'Échantillon Animal")
     animal_sample_type = st.radio(
         "**3. Quel animal analysez-vous ?**",
-        ["Souris (mouse)", "Rat", "Chien (dog)", "Chat (cat)", "Gallus gallus domesticus", "Lapin (rabbit)", "Cochon (pig)","Autre"],
+        [
+            "Souris (mouse)",
+            "Rat",
+            "Chien (dog)",
+            "Chat (cat)",
+            "Gallus gallus domesticus",
+            "Lapin (rabbit)",
+            "Cochon (pig)",
+            "Autre",
+        ],
         index=0,
         horizontal=True,
-        help="Ces sites ont des communautés microbiennes très distinctes."
+        help="Ces sites ont des communautés microbiennes très distinctes.",
     )
 
 st.markdown("---")
@@ -114,12 +128,12 @@ with col_reads:
     reads_type = st.radio(
         "**1. Quel est le type de lectures générées ?**",
         ["Short Reads (Illumina, etc.)", "Long Reads (PacBio, Nanopore, etc.)"],
-        help=""
+        help="",
     )
 # Autres paramètres de l'analyse (inchangés ou adaptés)
 st.markdown("## ⚙️ Paramètres d'Analyse")
 
-col_seuil,col_organisms_searched,col_analysis_type = st.columns(3)
+col_seuil, col_organisms_searched, col_analysis_type = st.columns(3)
 
 with col_organisms_searched:
     st.markdown("### Organismes Recherchés")
@@ -127,27 +141,40 @@ with col_organisms_searched:
         "**Types d'organismes recherchés dans l'échantillon**",
         ["Bactéries", "Archées", "Eucaryotes", "Virus"],
         default=["Bactéries", "Archées", "Eucaryotes", "Virus"],
-        help="Sélectionnez les types d'organismes que vous souhaitez identifier dans votre échantillon."
+        help="Sélectionnez les types d'organismes que vous souhaitez identifier dans votre échantillon.",
     )
 with col_analysis_type:
     st.markdown("### Type d'Analyse")
     analysis_type = st.multiselect(
         "**Type d'analyse souhaitée en + du profiling taxonomique**",
-        ["Profiling fonctionnel ", "Strain-level profiling"]
+        ["Profiling fonctionnel ", "Strain-level profiling"],
     )
+    if (
+        "Profiling fonctionnel " in analysis_type
+        and "Strain-level profiling" in analysis_type
+    ):
+        st.info(
+            "Le profiling fonctionnel et le strain-level profiling seront effectués en plus du profiling taxonomique."
+        )
+
+
 with col_seuil:
     st.select_slider(
         "**5. Seuil minimal de confiance (%)**",
         options=list(range(50, 101, 5)),
         value=80,
-        help="Définissez le pourcentage minimal de confiance pour l'assignation taxonomique."
+        help="Définissez le pourcentage minimal de confiance pour l'assignation taxonomique.",
     )
 
 
 st.markdown("---")
 
 # Bouton de soumission
-if st.button("Lancer la Préparation du Pipeline et Visualiser les Résultats", type="primary"):
-    st.success("Configuration de l'échantillon enregistrée. Le pipeline sera optimisé pour votre type de données.")
+if st.button(
+    "Lancer la Préparation du Pipeline et Visualiser les Résultats", type="primary"
+):
+    st.success(
+        "Configuration de l'échantillon enregistrée. Le pipeline sera optimisé pour votre type de données."
+    )
 
 st.button("Réinitialiser les paramètres")

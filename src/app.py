@@ -38,23 +38,23 @@ st.markdown("---")
 
 st.markdown("## 🦠 Paramètres de l'Échantillon")
 
-col_complex_or_not = st.columns(1)[0]
+# col_complex_or_not = st.columns(1)[0]
 
-with col_complex_or_not:
-    st.markdown("### Complexité de l'Échantillon")
-    complexity = st.radio(
-        "**Complexité de l'échantillon**",
-        [
-            "Complexe (Beaucoup d'espèces inconnues)",
-            "Relativement peu d'espèces inconnues",
-        ],
-        index=0,
-        help="Complexe ==> Outils de reconstruction de MAGs ; sinon ==> Profling taxonomique.",
-    )
-    if complexity == "Complexe (Beaucoup d'espèces inconnues)":
-        st.warning(
-            "Pour les échantillons complexes, nous recommandons d'utiliser le pipeline de reconstruction de MAGs."
-        )
+# with col_complex_or_not:
+#     st.markdown("### Complexité de l'Échantillon")
+#     complexity = st.radio(
+#         "**Complexité de l'échantillon**",
+#         [
+#             "Complexe (Beaucoup d'espèces inconnues)",
+#             "Relativement peu d'espèces inconnues",
+#         ],
+#         index=0,
+#         help="Complexe ==> Outils de reconstruction de MAGs ; sinon ==> Profling taxonomique.",
+#     )
+#     if complexity == "Complexe (Beaucoup d'espèces inconnues)":
+#         st.warning(
+#             "Pour les échantillons complexes, nous recommandons d'utiliser le pipeline de reconstruction de MAGs."
+#         )
 
 # Utilisation des colonnes pour organiser les questions
 col_type = st.columns(1)[0]
@@ -130,10 +130,13 @@ with col_reads:
         ["Short Reads (Illumina, etc.)", "Long Reads (PacBio, Nanopore, etc.)"],
         help="",
     )
+
+st.markdown("---")
+
 # Autres paramètres de l'analyse (inchangés ou adaptés)
 st.markdown("## ⚙️ Paramètres d'Analyse")
 
-col_seuil, col_organisms_searched, col_analysis_type = st.columns(3)
+col_organisms_searched, col_analysis_type = st.columns(2)
 
 with col_organisms_searched:
     st.markdown("### Organismes Recherchés")
@@ -161,13 +164,13 @@ with col_analysis_type:
         )
 
 
-with col_seuil:
-    st.select_slider(
-        "**5. Seuil minimal de confiance (%)**",
-        options=list(range(50, 101, 5)),
-        value=80,
-        help="Définissez le pourcentage minimal de confiance pour l'assignation taxonomique.",
-    )
+# with col_seuil:
+#     st.select_slider(
+#         "**5. Seuil minimal de confiance (%)**",
+#         options=list(range(50, 101, 5)),
+#         value=80,
+#         help="Définissez le pourcentage minimal de confiance pour l'assignation taxonomique.",
+#     )
 
 
 st.markdown("---")

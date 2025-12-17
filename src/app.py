@@ -14,14 +14,57 @@ st.markdown("---")
 
 st.markdown(
     """
-    **Bienvenue sur l'interface de Profiling Taxonomique du NNCR !**
+# Qu'est-ce que le Profiling Taxonomique ?
 
-    Cette application est conçue pour vous permettre d'explorer et d'analyser vos données
-    de séquençage métagénomique. Le profiling taxonomique est
-    une étape cruciale en métagénomique : il permet d'identifier et de quantifier les micro-organismes rapidement
-    (bactéries, archées, eucaryotes, virus) présents dans un échantillon (sol, eau, intestin, etc.).
-    Le profilage des métagénomes vis à vis des bases de données permet la détection et la quantification relative
-    des micro-organismes, même en faibles abondances lorsque l'assemblage n'est pas possible.
+Le **profiling taxonomique** est une étape clé de l'analyse bioinformatique en métagénomique. \
+Son objectif est d'identifier rapidement, sans devoir passer par des méthodes d'assemblage, les micro-organismes présents dans un échantillon \
+et d'estimer leur proportion relative.
+
+---
+
+## 📥 Entrée (Input) : Le fichier FASTQ
+Le point de départ est un fichier de séquençage brut au format **FASTQ**. 
+* L'outil analyse l'ensemble des lectures ADN (reads).
+
+---
+
+## ⚙️ L'Outil de Profiling
+L'outil (ex: *Kraken2*, *MetaPhlAn*, *mOTUs*) compare les reads à une base de données de référence. 
+
+### Utilisation du référentiel GTDB
+Pour ce profilage, nous utilisons la **GTDB (Genome Taxonomy Database)** plutôt que le NCBI. 
+- **Phylogénie génomique** : Les classifications sont basées sur la proximité génétique réelle (protéines marqueurs) \
+    plutôt que sur des critères historiques.
+- **Nomenclature à jour** : Utilisation des noms normalisés (ex: *Bacillota* au lieu de *Firmicutes*).
+
+L'outil déduit :
+1. **La présence des taxons** à plusieurs niveaux (Domaine, Phylum, Classe, Ordre, Famille, Genre, Espèce, Souche).
+2. **L'abondance relative** : La part (en %) de chaque taxon dans la communauté globale.
+
+---
+
+## 📤 Sortie (Output) : Tableau de Profiling
+Le résultat est un tableau structuré (TSV) qui récapitule la hiérarchie taxonomique et les statistiques de présence.
+
+```text
+# Taxonomic Profiling Output
+@SampleID:SAMPLEID
+@Version:0.9.1
+@Ranks:domain|phylum|class|order|family|genus|species
+@TaxonomyID:gtdb-r214
+@@TAXID	RANK	TAXPATH	TAXPATHSN	PERCENTAGE
+d__2	domain	d__2	Bacteria	98.81211
+d__2157	domain	d__2157	Archaea	1.18789
+p__1239	phylum	d__2|p__1239	Bacteria|Bacillota	59.75801
+p__1224	phylum	d__2|p__1224	Bacteria|Pseudomonadota	18.94674
+p__28890	phylum	d__2157|p__28890	Archaea|Methanobacteriota	1.18789
+c__91061	class	d__2|p__1239|c__91061	Bacteria|Bacillota|Bacilli	59.75801
+c__28211	class	d__2|p__1224|c__28211	Bacteria|Pseudomonadota|Alphaproteobacteria	18.94674
+c__183925	class	d__2157|p__28890|c__183925	Archaea|Methanobacteriota|Methanobacteria	1.18789
+o__1385	order	d__2|p__1239|c__91061|o__1385	Bacteria|Bacillota|Bacilli|Bacillales	59.75801
+o__356	order	d__2|p__1224|c__28211|o__356	Bacteria|Pseudomonadota|Alphaproteobacteria|Rhizobiales	10.52311
+o__204455	order	d__2|p__1224|c__28211|o__204455	Bacteria|Pseudomonadota|Alphaproteobacteria|Rhodobacterales	8.42263
+o__2158	order	d__2157|p__28890|c__183925|o__2158	Archaea|Methanobacteriota|Methanobacteria|Methanobacteriales	1.18789
     """
 )
 
@@ -81,10 +124,13 @@ if sample_category == "Humain":
     )
     if human_sample_type == "Intestinal (Gut)":
         catalogue = "hs_10_4_gut"
+        tool = "meteor"
     elif human_sample_type == "Cutané (Skin)":
         catalogue = "hs_2_9_skin"
+        tool = "meteor"
     elif human_sample_type == "Oral":
         catalogue = "hs_8_14_oral"
+        tool = "meteor"
 
 elif sample_category == "Environnemental":
     st.markdown("### Détails de l'Échantillon Environnemental")
@@ -110,12 +156,33 @@ elif sample_category == "Animal":
             "Gallus gallus domesticus",
             "Lapin (rabbit)",
             "Cochon (pig)",
+            "Mouton (sheep)",
+            "Chèvre (goat)",
             "Autre",
         ],
         index=0,
         horizontal=True,
         help="Ces sites ont des communautés microbiennes très distinctes.",
     )
+    if animal_sample_type == "Mouton (sheep)" or animal_sample_type == "Chèvre (goat)":
+        catalogue = "GlobDB"  # use singleM and/or sylph
+    else:
+        tool = "meteor"
+        if animal_sample_type == "Souris (mouse)":
+            catalogue = "mm_5_0_gut"  # use meteor
+        if animal_sample_type == "Chien (dog)":
+            catalogue = "clf_1_0_gut"  # use meteor
+        if animal_sample_type == "Chat (cat)":
+            catalogue = "fc_1_3_gut"  # use meteor
+        if animal_sample_type == "Gallus gallus domesticus":
+            catalogue = "gg_13_6_caecal"  # use meteor
+        if animal_sample_type == "Cochon (pig)":
+            catalogue = "ssc_9_3_gut"  # use meteor
+        if animal_sample_type == "Rat":
+            catalogue = "rn_5_9_gut"  # use meteor
+        if animal_sample_type == "Lapin (rabbit)":
+            catalogue = "oc_5_7_gut"  # use meteor
+
 
 st.markdown("---")
 
@@ -146,6 +213,11 @@ with col_organisms_searched:
         default=["Bactéries", "Archées", "Eucaryotes", "Virus"],
         help="Sélectionnez les types d'organismes que vous souhaitez identifier dans votre échantillon.",
     )
+    if "Virus" in organisms or "Eucaryotes" in organisms:
+        st.info(
+            "Nos outils ne permettent pas une identification des Virus et des Eucaryotes pour le moment. "
+        )
+
 with col_analysis_type:
     st.markdown("### Type d'Analyse")
     analysis_type = st.multiselect(

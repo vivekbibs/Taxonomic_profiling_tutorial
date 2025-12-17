@@ -22,51 +22,40 @@ et d'estimer leur proportion relative.
 
 ---
 
-## 📥 Entrée (Input) : Le fichier FASTQ
+## 📥 Input : Le fichier FASTQ
 Le point de départ est un fichier de séquençage brut au format **FASTQ**. 
 * L'outil analyse l'ensemble des lectures ADN (reads).
 
 ---
-
-## ⚙️ L'Outil de Profiling
-L'outil (ex: *Kraken2*, *MetaPhlAn*, *mOTUs*) compare les reads à une base de données de référence. 
-
-### Utilisation du référentiel GTDB
-Pour ce profilage, nous utilisons la **GTDB (Genome Taxonomy Database)** plutôt que le NCBI. 
-- **Phylogénie génomique** : Les classifications sont basées sur la proximité génétique réelle (protéines marqueurs) \
-    plutôt que sur des critères historiques.
-- **Nomenclature à jour** : Utilisation des noms normalisés (ex: *Bacillota* au lieu de *Firmicutes*).
-
-L'outil déduit :
-1. **La présence des taxons** à plusieurs niveaux (Domaine, Phylum, Classe, Ordre, Famille, Genre, Espèce, Souche).
-2. **L'abondance relative** : La part (en %) de chaque taxon dans la communauté globale.
-
----
-
 ## 📤 Sortie (Output) : Tableau de Profiling
-Le résultat est un tableau structuré (TSV) qui récapitule la hiérarchie taxonomique et les statistiques de présence.
+Le résultat est un tableau structuré (TSV) qui récapitule la hiérarchie taxonomique et les statistiques d'abondance'.
 
 ```text
-# Taxonomic Profiling Output
-@SampleID:SAMPLEID
-@Version:0.9.1
-@Ranks:domain|phylum|class|order|family|genus|species
-@TaxonomyID:gtdb-r214
-@@TAXID	RANK	TAXPATH	TAXPATHSN	PERCENTAGE
-d__2	domain	d__2	Bacteria	98.81211
-d__2157	domain	d__2157	Archaea	1.18789
-p__1239	phylum	d__2|p__1239	Bacteria|Bacillota	59.75801
-p__1224	phylum	d__2|p__1224	Bacteria|Pseudomonadota	18.94674
-p__28890	phylum	d__2157|p__28890	Archaea|Methanobacteriota	1.18789
-c__91061	class	d__2|p__1239|c__91061	Bacteria|Bacillota|Bacilli	59.75801
-c__28211	class	d__2|p__1224|c__28211	Bacteria|Pseudomonadota|Alphaproteobacteria	18.94674
-c__183925	class	d__2157|p__28890|c__183925	Archaea|Methanobacteriota|Methanobacteria	1.18789
-o__1385	order	d__2|p__1239|c__91061|o__1385	Bacteria|Bacillota|Bacilli|Bacillales	59.75801
-o__356	order	d__2|p__1224|c__28211|o__356	Bacteria|Pseudomonadota|Alphaproteobacteria|Rhizobiales	10.52311
-o__204455	order	d__2|p__1224|c__28211|o__204455	Bacteria|Pseudomonadota|Alphaproteobacteria|Rhodobacterales	8.42263
-o__2158	order	d__2157|p__28890|c__183925|o__2158	Archaea|Methanobacteriota|Methanobacteria|Methanobacteriales	1.18789
+clade_name	relative_abundance
+d__Bacteria	98.5000
+d__Archaea	1.5000
+d__Bacteria|p__Pseudomonadota	75.2000
+d__Bacteria|p__Bacillota	23.3000
+d__Archaea|p__Methanobacteriota	1.5000
+d__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria	45.1000
+d__Bacteria|p__Pseudomonadota|c__Alphaproteobacteria	30.1000
+d__Bacteria|p__Bacillota|c__Bacilli	23.3000
+d__Archaea|p__Methanobacteriota|c__Methanobacteria	1.5000
+d__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia coli	86.4000
+d__Bacteria|p__Bacillota|c__Bacilli|o__Lactobacillales|f__Streptococcaceae|g__Streptococcus|s__Streptococcus pneumoniae	12.1000
+d__Archaea|p__Methanobacteriota|c__Methanobacteria|o__Methanobacteriales|f__Methanobacteriaceae|g__Methanobrevibacter|s__Methanobrevibacter smithii	1.5000
+```
+
+## ⚙️ L'Outil de Profiling
+L'outil (ex: [*Sylph*](https://sylph-docs.github.io/), [*SingleM*](https://wwood.github.io/singlem/), [*meteor*](https://github.com/metagenopolis/meteor)) \
+compare les reads à une base de données de référence. 
+
+### A compléter
     """
 )
+
+
+
 
 st.info(
     """

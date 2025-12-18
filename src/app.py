@@ -236,6 +236,12 @@ with col_analysis_type:
 
 
 st.markdown("---")
+if catalogue=="GlobDB"
+    tool="singleM and sylph"
+if tool=="meteor":
+    st.markdown(
+        f"### L'outil sélectionné pour le profiling taxonomique est **{tool}** avec la base de données **{catalogue}**."
+    )
 
 # Bouton de soumission
 if st.button(

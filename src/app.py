@@ -28,7 +28,7 @@ Le point de départ est un fichier de séquençage brut au format **FASTQ**.
 
 ---
 ## 📤 Sortie (Output) : Tableau de Profiling
-Le résultat est un tableau structuré (TSV) qui récapitule la hiérarchie taxonomique et les statistiques d'abondance'.
+Le résultat est un tableau structuré (TSV) qui récapitule la hiérarchie taxonomique et les statistiques d'abondance.
 
 ```text
 clade_name	relative_abundance
@@ -47,7 +47,7 @@ d__Archaea|p__Methanobacteriota|c__Methanobacteria|o__Methanobacteriales|f__Meth
 ```
 
 ## ⚙️ L'Outil de Profiling
-L'outil (ex: [*Sylph*](https://sylph-docs.github.io/), [*SingleM*](https://wwood.github.io/singlem/), [*meteor*](https://github.com/metagenopolis/meteor)) \
+L'outil (ex: [*Sylph*](https://sylph-docs.github.io/), [*SingleM*](https://wwood.github.io/singlem/), [*meteor*](https://github.com/metagenopolis/meteor) ...) \
 compare les reads à une base de données de référence. 
 
 ### A compléter
@@ -130,8 +130,9 @@ elif sample_category == "Environnemental":
         horizontal=True,
         help="",
     )
-    if env_sample_type == "Océanique (Ocean)" or env_sample_type == "Sol (Soil)":
-        catalogue = "GlobDB"
+    catalogue = "GlobDB"
+    # if env_sample_type == "Océanique (Ocean)" or env_sample_type == "Sol (Soil)":
+    #     catalogue = "GlobDB"
 
 elif sample_category == "Animal":
     st.markdown("### Détails de l'Échantillon Animal")

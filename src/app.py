@@ -27,8 +27,8 @@ Le point de départ est un fichier de séquençage brut au format **FASTQ**.
 * L'outil analyse l'ensemble des lectures ADN (reads).
 
 ---
-## 📤 Sortie (Output) : Tableau de Profiling
-Le résultat est un tableau structuré (TSV) qui récapitule la hiérarchie taxonomique et les statistiques d'abondance.
+## 📤 Sortie (Output) : Profil d'abondances
+Le résultat est un tableau structuré (TSV) qui récapitule la hiérarchie taxonomique et les statistiques d'abondances.
 
 ```text
 clade_name	relative_abundance
@@ -47,7 +47,8 @@ d__Archaea|p__Methanobacteriota|c__Methanobacteria|o__Methanobacteriales|f__Meth
 ```
 
 ## ⚙️ L'Outil de Profiling
-L'outil (ex: [*Sylph*](https://sylph-docs.github.io/), [*SingleM*](https://wwood.github.io/singlem/), [*meteor*](https://github.com/metagenopolis/meteor) ...) \
+L'outil (ex: [**Sylph**](https://sylph-docs.github.io/), [**SingleM**](https://wwood.github.io/singlem/), \
+[**meteor**](https://github.com/metagenopolis/meteor) ou encore [**mOTUs**](https://github.com/motu-tool/mOTUs)) \
 compare les reads à une base de données de référence. 
 
 ### A compléter
@@ -173,7 +174,12 @@ elif sample_category == "Animal":
         if animal_sample_type == "Lapin (rabbit)":
             catalogue = "oc_5_7_gut"  # use meteor
 
-
+else:
+    st.markdown("### Détails de l'Échantillon")
+    other_sample_type = st.text_input(
+        "**3. Veuillez préciser la nature de votre échantillon :**",
+    )
+    catalogue = "GlobDB"
 st.markdown("---")
 
 # Autres paramètres de l'analyse (inchangés ou adaptés)
@@ -236,7 +242,8 @@ with col_analysis_type:
 
 
 st.markdown("---")
-if catalogue=="GlobDB"
+
+if catalogue=="GlobDB":
     tool="singleM and sylph"
 if tool=="meteor":
     st.markdown(

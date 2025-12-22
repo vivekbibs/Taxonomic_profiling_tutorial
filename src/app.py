@@ -28,7 +28,7 @@ Le point de départ est un fichier de séquençage brut au format **FASTQ**.
 
 ---
 ## 📤 Sortie (Output) : Profil d'abondances
-Le résultat est un tableau structuré (TSV) qui récapitule la hiérarchie taxonomique et les statistiques d'abondances.
+Le résultat est un tableau structuré (TSV) qui récapitule la hiérarchie taxonomique et les statistiques d'abondances de l'échantillon.
 
 ```text
 clade_name	relative_abundance
